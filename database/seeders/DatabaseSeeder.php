@@ -34,7 +34,7 @@ class DatabaseSeeder extends Seeder
         User::factory(10)->create();
         for($i=0; $i<5;$i++){
            $group= Group::factory()->create([
-            'owner_id'=>1
+            'admin_id'=>1,
            ]);
            $users= User::inRandomOrder()->limit(rand(2,5))->pluck('id');
            $group->users()->attach(array_unique([1,...$users]));
