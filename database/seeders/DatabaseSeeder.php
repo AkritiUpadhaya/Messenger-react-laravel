@@ -33,6 +33,7 @@ class DatabaseSeeder extends Seeder
         ]);
         User::factory(10)->create();
         for($i=0; $i<5;$i++){
+            
            $group= Group::factory()->create([
             'admin_id'=>1,
            ]);
