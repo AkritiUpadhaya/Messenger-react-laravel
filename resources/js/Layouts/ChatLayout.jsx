@@ -2,16 +2,18 @@ import { usePage } from '@inertiajs/react'
 import React from 'react'
 import AuthenticatedLayout from './AuthenticatedLayout';
 
-export default function ChatLayout({children}) {
-    const page= usePage;
-    const coversations= page.props.conversations;
-    const selectedCoversation= page.props.selectedConversation;
-    console.log('conversations', coversations);
-    console.log('selectedConversation', selectedCoversation);
+ function ChatLayout({children}) {
+    const page= usePage();
+    const conversations= page.props.conversations;
+    const selectedConversation= page.props.selectedConversation;
+    console.log('conversations', conversations);
+    console.log('selectedConversation', selectedConversation);
   return (
-    <AuthenticatedLayout>
+    <>
+   
       ChatLayout
       <div>{children}</div>
-      </AuthenticatedLayout>
-  )
+      </>
+  )    
 }
+export default ChatLayout;
