@@ -10,7 +10,7 @@ import Echo from 'laravel-echo';
     console.log('conversations', conversations);
     console.log('selectedConversation', selectedConversation);
     useEffect(()=>{
-        Echo.join('online') 
+        window.Echo.join(`online`)
         .here((users)=>{
           console.log('here', users);
         })
