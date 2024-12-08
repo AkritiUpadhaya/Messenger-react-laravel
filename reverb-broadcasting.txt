@@ -1,0 +1,160 @@
+LARAVEL REVERB & BROADCASTING CHEATSHEET
+=======================================
+
+INSTALLATION
+-----------
+# Install broadcasting
+php artisan install:broadcasting
+
+# Install Reverb specifically
+composer require laravel/reverb
+php artisan reverb:install
+
+CONFIGURATION
+------------
+# Environment Variables (.env)
+REVERB_APP_ID=my-app-id
+REVERB_APP_KEY=my-app-key
+REVERB_APP_SECRET=my-app-secret
+REVERB_HOST=your-domain.com
+REVERB_PORT=8080
+
+# Allow Origins (config/reverb.php)
+'apps' => [
+    [
+        'id' => 'my-app-id',
+        'allowed_origins' => ['domain.com'],
+    ]
+]
+
+RUNNING REVERB SERVER
+--------------------
+# Start server
+php artisan reverb:start
+
+# Custom host/port
+php artisan reverb:start --host=127.0.0.1 --port=9000
+
+# Debug mode
+php artisan reverb:start --debug
+
+# Restart server
+php artisan reverb:restart
+
+FRONTEND SETUP (Echo)
+--------------------
+# Install dependencies
+npm install --save-dev laravel-echo pusher-js
+
+# Basic Echo Configuration (resources/js/echo.js)
+window.Echo = new Echo({
+    broadcaster: 'reverb',
+    key: import.meta.env.VITE_REVERB_APP_KEY,
+    wsHost: import.meta.env.VITE_REVERB_HOST,
+    wsPort: import.meta.env.VITE_REVERB_PORT,
+    wssPort: import.meta.env.VITE_REVERB_PORT,
+    forceTLS: (import.meta.env.VITE_REVERB_SCHEME === 'https'),
+    enabledTransports: ['ws', 'wss']
+});
+
+BROADCASTING EVENTS
+------------------
+# Create event with broadcasting
+php artisan make:event OrderShipmentStatusUpdated
+
+# Event implementation
+class OrderShipmentStatusUpdated implements ShouldBroadcast
+{
+    public function broadcastOn(): array
+    {
+        return [
+            new PrivateChannel('orders.'.$this->order->id)
+        ];
+    }
+}
+
+# Dispatch event
+OrderShipmentStatusUpdated::dispatch($order);
+
+# Broadcast to others except current user
+broadcast(new OrderShipmentStatusUpdated($order))->toOthers();
+
+CHANNEL AUTHORIZATION
+-------------------
+# Define channel auth (routes/channels.php)
+Broadcast::channel('orders.{orderId}', function (User $user, int $orderId) {
+    return $user->id === Order::findOrNew($orderId)->user_id;
+});
+
+# Create channel class
+php artisan make:channel OrderChannel
+
+LISTENING TO EVENTS
+-----------------
+# Public channel
+Echo.channel('orders')
+    .listen('OrderShipmentStatusUpdated', (e) => {
+        console.log(e.order);
+    });
+
+# Private channel
+Echo.private(`orders.${orderId}`)
+    .listen('OrderShipmentStatusUpdated', (e) => {
+        console.log(e.order);
+    });
+
+# Presence channel
+Echo.join(`chat.${roomId}`)
+    .here((users) => {})
+    .joining((user) => {})
+    .leaving((user) => {})
+    .listen('NewMessage', (e) => {});
+
+# Stop listening
+Echo.private(`orders.${orderId}`)
+    .stopListening('OrderShipmentStatusUpdated');
+
+# Leave channel
+Echo.leaveChannel(`orders.${orderId}`);
+Echo.leave(`orders.${orderId}`); // Leaves all associated channels
+
+MODEL BROADCASTING
+----------------
+# Enable on Model
+use Illuminate\Database\Eloquent\BroadcastsEvents;
+
+class Post extends Model
+{
+    use BroadcastsEvents;
+
+    public function broadcastOn(string $event): array
+    {
+        return [$this, $this->user];
+    }
+}
+
+# Listen to model events
+Echo.private(`App.Models.User.${userId}`)
+    .listen('.PostUpdated', (e) => {
+        console.log(e.model);
+    });
+
+PRODUCTION CONSIDERATIONS
+-----------------------
+1. Increase system file limits (ulimit -n)
+2. Install ext-uv for better performance
+3. Configure Nginx as reverse proxy
+4. Set up process manager (Supervisor)
+5. Enable horizontal scaling:
+   REVERB_SCALING_ENABLED=true
+
+MONITORING
+---------
+# Enable Pulse integration (config/pulse.php)
+use Laravel\Reverb\Pulse\Recorders\ReverbConnections;
+use Laravel\Reverb\Pulse\Recorders\ReverbMessages;
+
+'recorders' => [
+    ReverbConnections::class => ['sample_rate' => 1],
+    ReverbMessages::class => ['sample_rate' => 1],
+] 

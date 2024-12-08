@@ -3,6 +3,11 @@ import Pusher from 'pusher-js';
 
 window.Pusher = Pusher;
 
+// Initialize Laravel Echo for real-time events
+// Echo requires Pusher as the underlying WebSocket library
+// Configuration below sets up connection to Laravel Reverb server
+
+
 window.Echo = new Echo({
     broadcaster: 'reverb',
     key: import.meta.env.VITE_REVERB_APP_KEY,
