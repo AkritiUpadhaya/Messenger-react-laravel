@@ -22,9 +22,9 @@ class Conversation extends Model
     public function lastMessage(){
         return $this->belongsTo(User::class, 'last_message_id');
     }
-    public static function getConversationsForSidebar(User $exceptUser){
-        $users= User::getUsersExceptUser($exceptUser);
-        $groups= Group::getGroupsForUsers($exceptUser);
+    public static function getConversationsForSidebar(User $user){
+        $users= User::getUsersExceptUser($user);
+        $groups= Group::getGroupsForUsers($user);
         return $users->map(function (User $user){
             return $user-> toConversationArray();
             })-> concat($groups->map(function (Group $group){

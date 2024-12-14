@@ -26,7 +26,7 @@ import Echo from 'laravel-echo';
             return -1;
           }
           if(a.last_message_date && b.last_message_date){
-            return b.last_message_date.localComapare(
+            return b.last_message_date.localeCompare(
               a.last_message_date);
           }
           else if(a.last_message_date){
