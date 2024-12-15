@@ -73,4 +73,4 @@ const ConversationItem =(
         </>
     );
 }
-export default ConversationItem
+export default ConversationItem;

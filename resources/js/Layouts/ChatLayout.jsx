@@ -4,6 +4,7 @@ import AuthenticatedLayout from './AuthenticatedLayout';
 import Echo from 'laravel-echo';
 import { PencilSquareIcon } from '@heroicons/react/24/outline';  
 import TextInput from '@/Components/TextInput';
+import ConversationItem from '@/Components/App/ConversationItem';
 
  function ChatLayout({children}) {
     const page= usePage();
