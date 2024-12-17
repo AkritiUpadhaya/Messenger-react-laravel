@@ -11,6 +11,10 @@ use Inertia\Inertia;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+use App\Models\MessageAttachment;
+use App\Models\Conversation;
+use App\Events\SocketMessage;
 
 
 
