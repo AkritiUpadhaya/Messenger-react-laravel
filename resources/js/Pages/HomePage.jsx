@@ -4,8 +4,11 @@ import { ChatBubbleLeftRightIcon } from '@heroicons/react/16/solid';
 
 import { Head } from '@inertiajs/react';
 import { useEffect, useRef, useState } from 'react';
+import ConversationHeader from '@/Components/App/ConversationHeader';
+import { data } from 'autoprefixer';
 
-function HomePage({messages}) {
+function HomePage({selectedConversation= null, messages}) {
+    console.log("messages",messages)
     const [localMessages, setLocalMessages]= useState([]);
     const messagesCtrRef= useRef(null);
     useEffect(()=>{
@@ -42,7 +45,7 @@ function HomePage({messages}) {
                         </div>
                     )}
                 </div>
-                <MessageInput conversation={selectedConversation}/>
+                {/* <MessageInput conversation={selectedConversation}/> */}
                 </>
             )}
        
