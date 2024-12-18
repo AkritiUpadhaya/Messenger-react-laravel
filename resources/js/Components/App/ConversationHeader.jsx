@@ -4,7 +4,7 @@ import React from 'react'
 import UserThumbnail from './UserThumbnail'
 import GroupThumbnail from './GroupThumbnail'
 
-const ConversationHeader = () => {
+const ConversationHeader = ({selectedConversation}) => {
   return (
     <>
     {selectedConversation && (

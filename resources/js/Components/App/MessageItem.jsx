@@ -4,7 +4,7 @@ import UserThumbnail from './UserThumbnail';
 import ReactMarkdown from 'react-markdown';
 import {formatMessageDateLong} from "@/helpers";
 
-const MessageItem = () => {
+const MessageItem = ({message}) => {
     const currentUser= usePage().props.auth.user;
   return (
     <>
