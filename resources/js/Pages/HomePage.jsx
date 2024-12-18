@@ -13,7 +13,7 @@ function HomePage({selectedConversation= null, messages= null}) {
     const [localMessages, setLocalMessages]= useState([]);
     const messagesCtrRef= useRef(null);
     useEffect(()=>{
-        setLocalMessages(messages.data)
+        setLocalMessages(messages.data.reverse())
     }, [messages])
     return (
         <>

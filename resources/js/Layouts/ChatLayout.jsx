@@ -18,7 +18,7 @@ import ConversationItem from '@/Components/App/ConversationItem';
     const onSearch=(ev)=>{
       const search= ev.target.value.toLowerCase();
       setLocalConversation(
-        conversations.filer((conversation)=>{
+        conversations.filter((conversation)=>{
           return(
             conversation.name.toLowerCase().includes(search)
           )
