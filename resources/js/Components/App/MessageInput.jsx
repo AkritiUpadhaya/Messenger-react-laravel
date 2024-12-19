@@ -1,4 +1,5 @@
-import { PaperClipIcon, PhotoIcon } from '@heroicons/react/16/solid'
+import { FaceSmileIcon, HandThumbUpIcon, PaperAirplaneIcon, PaperClipIcon, PhotoIcon } from '@heroicons/react/16/solid'
+import { space } from 'postcss/lib/list'
 import React, { useState } from 'react'
 
 const MessageInput = ({conversation= null}) => {
@@ -25,8 +26,27 @@ const MessageInput = ({conversation= null}) => {
         </div>
         <div className='order-1 px-3 xs:p-0 min-w-[220px] basis-full xs:basis-0 xs:order flex-1 relative'>
             <div className='flex'>
-                <NewMessageInput value={newMessage}/>
+                <NewMessageInput value={newMessage} 
+                onchange={(ev)=>setNewMessage(ev.target.value)}/>
+                <button className='btn btn-info rounded-1-none'>
+                    {messageSending &&(
+                        <span className='loading loading-spinner loading-xs'></span>
+                    )}
+                    <PaperAirplaneIcon className='w-6'/>
+                    <span className='hidden sm:inline'>Send</span>
+                </button>
             </div>
+            {inputErrorMessage &&(
+                <p className='text-xs text-red-400'>{inputErrorMessage}</p>
+            )}
+        </div>
+        <div className='order-3 xs:order-3 p-2 flex'>
+            <button className='p-1 text-gray-400 hover:text-gray-300 '>
+                <FaceSmileIcon className='w-6 h-6'/>
+            </button>
+            <button className='p-1 text-gray-400 hover:text-gray-300 '>
+                <HandThumbUpIcon className='w-6 h-6 '/>
+            </button>
         </div>
     </div>
     </>
