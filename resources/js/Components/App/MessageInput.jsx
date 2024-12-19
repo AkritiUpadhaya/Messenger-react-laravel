@@ -1,6 +1,7 @@
 import { FaceSmileIcon, HandThumbUpIcon, PaperAirplaneIcon, PaperClipIcon, PhotoIcon } from '@heroicons/react/16/solid'
 import { space } from 'postcss/lib/list'
 import React, { useState } from 'react'
+import NewMessageInput from './NewMessageInput'
 
 const MessageInput = ({conversation= null}) => {
     const [newMessage, setNewMessage]= useState("")
