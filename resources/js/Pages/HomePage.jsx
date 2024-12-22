@@ -6,12 +6,25 @@ import { Head } from '@inertiajs/react';
 import { useEffect, useRef, useState } from 'react';
 import ConversationHeader from '@/Components/App/ConversationHeader';
 import MessageItem from '@/Components/App/MessageItem';
+import { useEventBus } from '@/EventBus';
 
 
 function HomePage({selectedConversation= null, messages= null}) {
     console.log("messages",messages)
     const [localMessages, setLocalMessages]= useState([]);
     const messagesCtrRef= useRef(null);
+    const {on}= useEventBus()
+    useEffect(()=>{
+        setTimeout(()=>{
+            if(messagesCtrRef.current){
+                messagesCtrRef.current.scrollTop = messagesCtrRef.current.scrollHeight;
+            }
+        }, 10)
+        const offCreated= on('message.created', messageCreated)
+        return()=>{
+            offCreated();
+        }
+    },[selectedConversation])
     useEffect(()=>{
         setLocalMessages(messages.data.reverse())
     }, [messages])
