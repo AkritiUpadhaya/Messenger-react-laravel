@@ -3,14 +3,66 @@ import Dropdown from '@/Components/Dropdown';
 import NavLink from '@/Components/NavLink';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
 import { Link, usePage } from '@inertiajs/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function AuthenticatedLayout({ header, children }) {
     const page= usePage();
     const user = page.props.auth.user;
+    const conversations= page.props.conversations
 
     const [showingNavigationDropdown, setShowingNavigationDropdown] =
         useState(false);
+        useEffect(()=>{
+            conversations.forEach(()=>{
+                let channel= `message.group.${conversation.id}`
+                if(conversation.is_user){
+                    channel= `message.user.${[
+                        parseInt(user.id),
+                        parseInt(conversation.id),
+                    ]
+                .sort((a,b)=> a-b)
+            .join("-")}`;
+                }
+                window.Echo.private(channel)
+                .error((error)=>{
+                    console.error(error);
+                })
+                .listen("sockectMessage", (e)=>{
+                    console.log("socketMessage", e)
+                    const message= e.message
+                    emit("message.created", message)
+                    if(message.sender_id===user.id){
+                        return
+                    }
+                    emit("newMessageNotification",{
+                        user: message.sender,
+                        group: message.group_id,
+                        message: 
+                        message.message ||
+                        `shared ${
+                            message.attachments.length === 1
+                            ? "an attachment"
+                            : message.attachments.length +"attachments"
+                        }`
+                    })
+                })
+            })
+            return()=>{
+                conversations.forEach(()=>{
+                    let channel= `message.group.${conversation.id}`
+                    if(conversation.is_user){
+                        channel= `message.user.${[
+                            parseInt(user.id),
+                            parseInt(conversation.id),
+                        ]
+                    .sort((a,b)=> a-b)
+                .join("-")}`;
+                    }
+                    window.Echo.leave(channel)
+
+            })
+        }
+        },[conversations])
 
     return (
         <div className="min-h-screen bg-gray-100 dark:bg-gray-900">

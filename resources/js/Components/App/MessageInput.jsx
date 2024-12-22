@@ -61,7 +61,7 @@ const MessageInput = ({conversation= null}) => {
         </div>
         <div className='order-1 px-3 xs:p-0 min-w-[220px] basis-full xs:basis-0 xs:order flex-1 relative'>
             <div className='flex'>
-                <NewMessageInput value={newMessage} 
+                <NewMessageInput value={newMessage} onSend={onSendClick}
                 onchange={(ev)=>setNewMessage(ev.target.value)}/>
                 <button onClick={onSendClick} className='btn btn-info rounded-1-none'>
                     {messageSending &&(

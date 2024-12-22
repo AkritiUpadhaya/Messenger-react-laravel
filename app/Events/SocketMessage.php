@@ -44,7 +44,7 @@ class SocketMessage implements ShouldBroadcastNow
        }
        else{
       
-        new PrivateChannel('message.user.'. collect([$m->sender_id, $m->receiver_id])->sort()->implode('-'));
+        $channels[]= new PrivateChannel('message.user.'. collect([$m->sender_id, $m->receiver_id])->sort()->implode('-'));
     }
       return $channels;
     }
