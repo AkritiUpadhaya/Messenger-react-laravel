@@ -3,16 +3,20 @@ import ChatLayout from '@/Layouts/ChatLayout';
 import { ChatBubbleLeftRightIcon } from '@heroicons/react/16/solid';
 
 import { Head } from '@inertiajs/react';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import ConversationHeader from '@/Components/App/ConversationHeader';
 import MessageItem from '@/Components/App/MessageItem';
 import { useEventBus } from '@/EventBus';
+import axios from 'axios';
 
 
 function HomePage({selectedConversation= null, messages= null}) {
     console.log("messages",messages)
     const [localMessages, setLocalMessages]= useState([]);
     const messagesCtrRef= useRef(null);
+    const loadMoreIntersect= useRef(null);
+    const [noMoreMessages, setNoMoreMessages]= useState(false)
+    const [ScrollFromButton, setScrollFromButton]= useState(0)
     const {on}= useEventBus()
     const messageCreated=(message)=>{
         if(selectedConversation && selectedConversation.is_group && selectedConversation.id== message.group_id){
@@ -22,6 +26,30 @@ function HomePage({selectedConversation= null, messages= null}) {
             setLocalMessages((prevMessages)=>[...prevMessages, message])
         }
     }
+    const loadMoreMessages= useCallback(()=>{
+        if(noMoreMessages){
+            return
+        }
+        const firstMessage= localMessages[0]
+        axios
+        .get(route("message.loadOlder", firstMessage.id))
+        .then(({data})=>{
+            if(data.data.length===0){
+                setNoMoreMessages(true)
+                return
+            }
+            const scrollHeight= messagesCtrRef.current.scrollHeight
+            const scrollTop= messagesCtrRef.current.scrollTop
+            const clientHeight= messagesCtrRef.current.clientHeight
+            const tempScrollFromButton= scrollHeight-clientHeight
+            console.log("tempScrollFromButton",tempScrollFromButton)
+            setScrollFromButton(scrollHeight-scrollTop-clientHeight)
+            setLocalMessages((prevMessages)=>{
+                return[...data.data.reverse(), ...prevMessages]
+            })
+        })
+    
+    }, [localMessages])
     useEffect(()=>{
         setTimeout(()=>{
             if(messagesCtrRef.current){
@@ -29,6 +57,8 @@ function HomePage({selectedConversation= null, messages= null}) {
             }
         }, 10)
         const offCreated= on('message.created', messageCreated)
+        setScrollFromButton(0)
+        setNoMoreMessages(false)
         return()=>{
             offCreated();
         }
@@ -36,6 +66,32 @@ function HomePage({selectedConversation= null, messages= null}) {
     useEffect(()=>{
         setLocalMessages(messages.data.reverse())
     }, [messages])
+    useEffect(()=>{
+        if(messagesCtrRef.current && setScrollFromButton !==null){
+            messagesCtrRef.current.scrollTop =
+            messagesCtrRef.current.scrollHeight-messagesCtrRef.current.offsetHeight-ScrollFromButton
+        }
+        if(noMoreMessages){
+            return
+        }
+        const observer= new IntersectionObserver(
+        (entries)=>
+            entries.forEach(
+                (entry)=>entry.isIntersecting && loadMoreMessages()
+            ),
+            {
+                rootMargin: "0px 0px 250px 0px"
+            }
+        )
+        if(loadMoreIntersect.current){
+            setTimeout(()=>{
+                observer.observe(loadMoreIntersect.current)
+            }, 100)
+        }
+        return()=>{
+            observer.disconnect()
+        }
+    },[localMessages])
     return (
         <>
         {!messages && (
@@ -60,6 +116,7 @@ function HomePage({selectedConversation= null, messages= null}) {
                     )}
                     {localMessages.length>0 && (
                         <div className='flex-1 flex flex-col'>
+                        <div ref={loadMoreIntersect}></div>
                             {localMessages.map((message)=>(
                                 <MessageItem key={message.id}
                                 message= {message} />

@@ -9,7 +9,7 @@ export const EventBusProvider= ({Children})=>{
             }
         }
     }
-    const on= (name, cb)=>{
+    const on = (name, cb)=>{
         if(!events[name]){
             events[name]=[]
         }

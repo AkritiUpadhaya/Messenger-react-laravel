@@ -9,6 +9,9 @@ const MessageInput = ({conversation= null}) => {
     const [inputErrorMessage, setInputErrorMessage]= useState('')
     const [messageSending, setMessageSending]= useState(false)
     const onSendClick=()=>{
+        if(messageSending){
+            return
+        }
         if(newMessage.trim()===""){
             setInputErrorMessage("Please provide a message or upload attachments")
             setTimeout(()=>{
@@ -63,7 +66,7 @@ const MessageInput = ({conversation= null}) => {
             <div className='flex'>
                 <NewMessageInput value={newMessage} onSend={onSendClick}
                 onchange={(ev)=>setNewMessage(ev.target.value)}/>
-                <button onClick={onSendClick} className='btn btn-info rounded-1-none'>
+                <button onClick={onSendClick} disabled={messageSending} className='btn btn-info rounded-1-none'>
                     {messageSending &&(
                         <span className='loading loading-spinner loading-xs'></span>
                     )}

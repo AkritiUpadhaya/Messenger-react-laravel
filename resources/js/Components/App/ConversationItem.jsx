@@ -2,6 +2,7 @@ import {Link, usePage} from "@inertiajs/react";
 import UserThumbnail from "./UserThumbnail";
 import GroupThumbnail from "./GroupThumbnail";
 import Dropdown from "../Dropdown";
+import { formatMessageDateSort } from "@/helpers";
 const ConversationItem =(
     {conversation, 
     selectedConversation=null,
@@ -56,7 +57,7 @@ const ConversationItem =(
                     </h3>
                     {conversation.last_message_date &&(
                         <span className="text-nowrap">
-                            {conversation.last_message_date}
+                            {formatMessageDateSort(conversation.last_message_date)}
                         </span>
                     )}
                 </div>
