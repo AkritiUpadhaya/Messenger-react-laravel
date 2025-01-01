@@ -3,6 +3,8 @@ import { space } from 'postcss/lib/list'
 import React, { useState } from 'react'
 import NewMessageInput from './NewMessageInput'
 import axios from 'axios'
+import { Popover, PopoverButton, PopoverPanel } from '@headlessui/react'
+import EmojiPicker from 'emoji-picker-react'
 
 const MessageInput = ({conversation= null}) => {
     const [newMessage, setNewMessage]= useState("")
@@ -79,9 +81,14 @@ const MessageInput = ({conversation= null}) => {
             )}
         </div>
         <div className='order-3 xs:order-3 p-2 flex'>
-            <button className='p-1 text-gray-400 hover:text-gray-300 '>
+            <Popover className="relative">
+                <PopoverButton className='p-1 text-gray-400 hover:text-gray-300 '>
                 <FaceSmileIcon className='w-6 h-6'/>
-            </button>
+                </PopoverButton>
+                <PopoverPanel className="absolute z-10 right-0 bottom-full">
+                    <EmojiPicker onEmojiClick={ev=>setNewMessage(newMessage + ev.emoji)}></EmojiPicker>
+                </PopoverPanel>
+            </Popover>
             <button className='p-1 text-gray-400 hover:text-gray-300 '>
                 <HandThumbUpIcon className='w-6 h-6 '/>
             </button>
