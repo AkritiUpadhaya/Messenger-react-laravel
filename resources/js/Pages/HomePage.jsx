@@ -14,6 +14,14 @@ function HomePage({selectedConversation= null, messages= null}) {
     const [localMessages, setLocalMessages]= useState([]);
     const messagesCtrRef= useRef(null);
     const {on}= useEventBus()
+    const messageCreated=(message)=>{
+        if(selectedConversation && selectedConversation.is_group && selectedConversation.id== message.group_id){
+            setLocalMessages((prevMessages)=>[...prevMessages, message])
+        }
+        if(selectedConversation && selectedConversation.is_user && (selectedConversation.id== message.sender_id || selectedConversation.id==message.receiver_id)){
+            setLocalMessages((prevMessages)=>[...prevMessages, message])
+        }
+    }
     useEffect(()=>{
         setTimeout(()=>{
             if(messagesCtrRef.current){
