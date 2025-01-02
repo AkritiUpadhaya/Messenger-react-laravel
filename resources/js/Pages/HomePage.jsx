@@ -17,6 +17,8 @@ function HomePage({selectedConversation= null, messages= null}) {
     const loadMoreIntersect= useRef(null);
     const [noMoreMessages, setNoMoreMessages]= useState(false)
     const [ScrollFromButton, setScrollFromButton]= useState(0)
+    const [showAttachmentPreview, setShowAttachmentPreview]= useState(false)
+    const [previewAttachment, setPreviewAttachment]= useState({})
     const {on}= useEventBus()
     const messageCreated=(message)=>{
         if(selectedConversation && selectedConversation.is_group && selectedConversation.id== message.group_id){
@@ -25,6 +27,13 @@ function HomePage({selectedConversation= null, messages= null}) {
         if(selectedConversation && selectedConversation.is_user && (selectedConversation.id== message.sender_id || selectedConversation.id==message.receiver_id)){
             setLocalMessages((prevMessages)=>[...prevMessages, message])
         }
+    }
+    const onAttachmentClick= (attachments,ind)=>{
+        setPreviewAttachment({
+            attachments,
+            ind,
+        })
+        setShowAttachmentPreview(true)
     }
     const loadMoreMessages= useCallback(()=>{
         if(noMoreMessages){
@@ -127,7 +136,13 @@ function HomePage({selectedConversation= null, messages= null}) {
                 <MessageInput conversation={selectedConversation}/>
                 </>
             )}
-       
+            {previewAttachment.attachments && (
+                <AttachmentPreviewModel
+                attachments={previewAttachment.attachments}
+                index={previewAttachment.ind}
+                show={showAttachmentPreview}
+                onClose={()=> setShowAttachmentPreview(false)}/>
+            )}
         </>
          
     );
