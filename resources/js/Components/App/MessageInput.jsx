@@ -5,6 +5,10 @@ import NewMessageInput from './NewMessageInput'
 import axios from 'axios'
 import { Popover, PopoverButton, PopoverPanel } from '@headlessui/react'
 import EmojiPicker from 'emoji-picker-react'
+import { isAudio, isImage } from '@/helpers'
+import AttachmentPreview from './AttachmentPreview'
+import CustomAudioPlayer from './CustomAudioPlayer'
+import AudioRecorder from './AudioRecorder'
 
 const MessageInput = ({conversation= null}) => {
     const [newMessage, setNewMessage]= useState("")
@@ -69,6 +73,9 @@ const MessageInput = ({conversation= null}) => {
             setInputErrorMessage(message || "An error occured while sending the message")
         })
     }
+    const recordedAudioReady= (file, url)=>{
+        setChosenFile((prevFiles)=>[...prevFiles,{file,url}])
+    }
   return (
     <>
     <div className='flex flex-wrap items-start border-t border-slate-700 py-3'>
@@ -88,6 +95,7 @@ const MessageInput = ({conversation= null}) => {
                 accept='image/*'
                 className='absolute left-0 top-0 right-0 bottom-0 z-20 opacity-0 cursor-pointer'/>
             </button>
+            <AudioRecorder fileReady/>
         </div>
         <div className='order-1 px-3 xs:p-0 min-w-[220px] basis-full xs:basis-0 xs:order flex-1 relative'>
             <div className='flex'>

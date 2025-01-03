@@ -113,7 +113,7 @@ const AttachmentPreviewModel = (attachments,index, show=false, onClose=()=>{}) =
                                             {!isPreviewable(attachment &&(
                                                 <div className='p-32 flex flex-col justify-center items-center text-gray-100'>
                                                     <PaperClipIcon className='w-10 h-10 mb-3'/>
-                                                    <small>
+                                                    <small className='text-center'>
                                                         {attachment.name}
                                                     </small>
                                                 </div>

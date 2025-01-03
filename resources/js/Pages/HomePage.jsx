@@ -8,6 +8,7 @@ import ConversationHeader from '@/Components/App/ConversationHeader';
 import MessageItem from '@/Components/App/MessageItem';
 import { useEventBus } from '@/EventBus';
 import axios from 'axios';
+import AttachmentPreviewModel from '@/Components/App/AttachmentPreviewModel';
 
 
 function HomePage({selectedConversation= null, messages= null}) {
@@ -127,8 +128,10 @@ function HomePage({selectedConversation= null, messages= null}) {
                         <div className='flex-1 flex flex-col'>
                         <div ref={loadMoreIntersect}></div>
                             {localMessages.map((message)=>(
-                                <MessageItem key={message.id}
-                                message= {message} />
+                                <MessageItem 
+                                key={message.id}
+                                message= {message}
+                                attachmentCLick={onAttachmentClick} />
                             ))}
                         </div>
                     )}
