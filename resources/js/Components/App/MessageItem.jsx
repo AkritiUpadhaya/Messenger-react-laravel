@@ -3,6 +3,7 @@ import React from 'react'
 import UserThumbnail from './UserThumbnail';
 import ReactMarkdown from 'react-markdown';
 import {formatMessageDateLong} from "@/helpers";
+import MessageOptionDropDown from './MessageOptionDropDown';
 
 const MessageItem = ({message, attachmentCLick}) => {
     const currentUser= usePage().props.auth.user;
@@ -27,6 +28,9 @@ const MessageItem = ({message, attachmentCLick}) => {
                     : ""
                 )}
                 >
+                    {message.sender_id===currentUser.id &&(
+                        <MessageOptionDropDown/>
+                    )}
                     <div className='chat-message'>
                         <div className='chat-message-content'>
                             <ReactMarkdown>{message.message}</ReactMarkdown>
