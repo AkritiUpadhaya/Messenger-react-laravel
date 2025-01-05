@@ -29,7 +29,7 @@ const MessageItem = ({message, attachmentCLick}) => {
                 )}
                 >
                     {message.sender_id===currentUser.id &&(
-                        <MessageOptionDropDown/>
+                        <MessageOptionDropDown message={message}/>
                     )}
                     <div className='chat-message'>
                         <div className='chat-message-content'>
