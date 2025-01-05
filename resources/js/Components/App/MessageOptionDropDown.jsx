@@ -1,10 +1,5 @@
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
-import { Fragment } from "react"
 import {
-    ArchiveBoxXMarkIcon,
-    ChevronDownIcon,
-    PencilIcon,
-    Square2StackIcon,
     TrashIcon,
   } from '@heroicons/react/16/solid'
 import axios from 'axios';
