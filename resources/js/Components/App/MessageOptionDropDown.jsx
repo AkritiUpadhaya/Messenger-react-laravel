@@ -7,15 +7,31 @@ import {
     Square2StackIcon,
     TrashIcon,
   } from '@heroicons/react/16/solid'
+import axios from 'axios';
 
-const MessageOptionDropDown=()=>{
+export default function MessageOptionDropDown({message}){
+    const onMessageDelete=()=>{
+        console.log("delete message")
+        axios
+        .post(route("message.destroy", message.id))
+        .then((res)=>{
+            emit("message.deleted",message)
+            console.log(res.data)
+        })
+        .catch((error)=>{
+            console.error(error)
+        })
+    }
+    
     return (
         <div>
-          <Menu>
+          <Menu as="div" className="relative inline-block text-left">
+            <div>
         <MenuButton className="inline-flex items-center gap-2 rounded-md bg-gray-800 py-1.5 px-3 text-sm/6 font-semibold text-white shadow-inner shadow-white/10 focus:outline-none data-[hover]:bg-gray-700 data-[open]:bg-gray-700 data-[focus]:outline-1 data-[focus]:outline-white">
           <EllipsisVerticalIcon className="h-5 w-5"/>
           <ChevronDownIcon className="size-4 fill-white/60" />
         </MenuButton>
+        </div>
 
         <MenuItems
           transition
@@ -56,4 +72,3 @@ const MessageOptionDropDown=()=>{
         </div>
     )
 }
-export default MessageOptionDropDown
