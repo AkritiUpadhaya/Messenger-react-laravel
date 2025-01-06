@@ -1,3 +1,4 @@
+import { useEventBus } from '@/EventBus';
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
 import {
     TrashIcon,
@@ -5,13 +6,13 @@ import {
 import axios from 'axios';
 
 export default function MessageOptionDropDown({message}){
+    const {emit}= useEventBus()
     const onMessageDelete=()=>{
         console.log("delete message")
         axios
         .delete(route("message.destroy", message.id))
         .then((res)=>{
-            emit("message.deleted",message)
-            console.log(res.data)
+            emit("message.deleted",{message, prevMessage:res.data.message})
         })
         .catch((error)=>{
             console.error(error)
