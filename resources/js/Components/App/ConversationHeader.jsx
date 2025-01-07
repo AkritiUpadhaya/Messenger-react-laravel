@@ -1,10 +1,23 @@
-import { ArrowLeftIcon } from '@heroicons/react/16/solid'
+import { ArrowLeftIcon, PencilSquareIcon, TrashIcon } from '@heroicons/react/16/solid'
 import { Link } from '@inertiajs/react'
 import React from 'react'
 import UserThumbnail from './UserThumbnail'
 import GroupThumbnail from './GroupThumbnail'
+import axios from 'axios'
 
 const ConversationHeader = ({selectedConversation}) => {
+    const onDeleteGroup=()=>{
+        if(!window.confirm("Are you sure you want to delete this group?")){
+            return
+        }
+        axios.delete(route('group.destroy', selectedConversation.id))
+        .then((res)=>{
+            console.log(res)
+        })
+        .catch((err)=>{
+            console.error(err)
+        })
+    }
   return (
     <>
     {selectedConversation && (
@@ -26,6 +39,38 @@ const ConversationHeader = ({selectedConversation}) => {
                     )}
                 </div>
             </div>
+            {selectedConversation.is_group && (
+                <div className='flex gap-3 '>
+                    <GroupDescriptionPopover
+                    details={selectedConversation.details}/>
+                    <GroupUsersPopover
+                    users= {selectedConversation.users}/>
+                    {selectedConversation.admin_id==authUser.id &&(
+                        <>
+                        <div 
+                        className='tooltip tooltip-left'
+                        data-tip="Edit Group">
+                            <button onClick={(ev)=>
+                                emit(
+                                    "GroupModel.show",
+                                    selectedConversation
+                                )
+                            } className='text-gray-400 hover:text-gray-200'>
+                                <PencilSquareIcon className='w-4'/>
+                            </button>
+                        </div>
+                        <div className='tooltip tooltip-left'
+                        data-tip="Delete Group">
+                            <button 
+                            onClick={onDeleteGroup}
+                            className='text-gray-400 hover:text-gray-200'>
+                                <TrashIcon className='w-4'/>
+                            </button>
+                        </div>
+                        </>
+                    )}
+                </div>
+            )}
 
         </div>
     )}
