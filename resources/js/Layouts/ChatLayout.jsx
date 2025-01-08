@@ -6,6 +6,7 @@ import { PencilSquareIcon } from '@heroicons/react/24/outline';
 import TextInput from '@/Components/TextInput';
 import ConversationItem from '@/Components/App/ConversationItem';
 import { useEventBus } from '@/EventBus';
+import GroupModal from '@/Components/App/GroupModal';
 
 
  function ChatLayout({children}) {
@@ -185,6 +186,7 @@ import { useEventBus } from '@/EventBus';
       <div className='flex-1 flex flex-col overflow-hidden'>
         {children}
         </div>
+        <GroupModal/>
       </div>
       </>
   )    

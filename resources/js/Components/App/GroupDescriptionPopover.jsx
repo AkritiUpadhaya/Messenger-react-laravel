@@ -11,11 +11,13 @@ export default function GroupDescriptionPopover({details}) {
         <PopoverPanel
           transition
           anchor="bottom"
-          className="divide-y divide-white/5 rounded-xl bg-white/5 text-sm/6 transition duration-200 ease-in-out [--anchor-gap:var(--spacing-5)] data-[closed]:-translate-y-1 data-[closed]:opacity-0"
+          className="absolute right-0 z-10 mt-3 w-[300px] divide-y divide-white/5 rounded-xl bg-white/5 text-sm/6 transition duration-200 ease-in-out data-[closed]:-translate-y-1 data-[closed]:opacity-0"
         >
-          <div className="p-3">
-            <className="block rounded-lg py-2 px-3 transition hover:bg-white/5" href="#">
-              <h2 className="font-semibold text-white">Description</h2>
+            <div className='overflow-hidden rounded-lg shadow-lg ring-1 ring-black/5'>
+            <div className='bg-gray-800 py-4'>
+              <h2 className="font-semibold text-white">
+                Description
+                </h2>
               {details &&(
                 <div className='text-xs'>
                     {details}
@@ -26,9 +28,8 @@ export default function GroupDescriptionPopover({details}) {
                     No description is defined 
                 </div>
               )}
-            </a>
-        
-          </div>
+              </div>
+              </div>
         </PopoverPanel>
       </Popover>
       </>
