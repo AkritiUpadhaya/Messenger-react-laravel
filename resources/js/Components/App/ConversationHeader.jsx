@@ -1,13 +1,16 @@
 import { ArrowLeftIcon, PencilSquareIcon, TrashIcon } from '@heroicons/react/16/solid'
-import { Link } from '@inertiajs/react'
+import { Link, usePage } from '@inertiajs/react'
 import React from 'react'
 import UserThumbnail from './UserThumbnail'
 import GroupThumbnail from './GroupThumbnail'
 import axios from 'axios'
 import GroupDescriptionPopover from './GroupDescriptionPopover'
 import GroupUsersPopover from './GroupUsersPopover'
+import { useEventBus } from '@/EventBus'
 
 const ConversationHeader = ({selectedConversation}) => {
+    const authUser= usePage().props.auth.user
+    const {emit}= useEventBus()
     const onDeleteGroup=()=>{
         if(!window.confirm("Are you sure you want to delete this group?")){
             return

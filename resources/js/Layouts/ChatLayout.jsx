@@ -16,6 +16,7 @@ import GroupModal from '@/Components/App/GroupModal';
     const [online, setOnline]= useState({});
     const [localConversation, setLocalConversation]= useState(conversations);
     const [sortedConversation, setSortedConversation]= useState([])
+    const [showGroupModal, setShowGroupModal]= useState(false)
     const {on}= useEventBus()
     console.log('conversations', conversations);
     console.log('selectedConversation', selectedConversation);
@@ -77,9 +78,13 @@ import GroupModal from '@/Components/App/GroupModal';
     useEffect(()=>{
       const offCreated= on("message.created", messageCreated)
       const offDeleted= on("message.deleted", messageDeleted)
+      const offModalShow= on("GroupModal.show", (group)=>{
+        setShowGroupModal(true)
+      })
       return()=>{
         offCreated()
         offDeleted()
+        offModalShow()
       }
     },[on])
     
@@ -152,6 +157,7 @@ import GroupModal from '@/Components/App/GroupModal';
     <>
       <div className="flex-1 w-full flex overflow-hidden">
         <div className={`transition-all w-full sm:w-[220px] md:w-[300px] bg-slate-400 flex flex-col overflow-hidden ${
+
           selectedConversation? "-ml-[100%] sm:ml-0":""
         }`}>
           <div className='flex items-center justify-between py-2 px-3 text-xl font-medium'>
@@ -159,7 +165,7 @@ import GroupModal from '@/Components/App/GroupModal';
             <div className='tooltip tooltip-left'
             data-tip="Create new Group"
             >
-              <button className='text-gray-800 hover:text-gray-200'>
+              <button onClick={ev=> setShowGroupModal(true)} className='text-gray-800 hover:text-gray-200'>
                 <PencilSquareIcon className="w-4 h-4 inline-block ml-2"/> 
               </button>
             </div>
@@ -186,7 +192,7 @@ import GroupModal from '@/Components/App/GroupModal';
       <div className='flex-1 flex flex-col overflow-hidden'>
         {children}
         </div>
-        <GroupModal/>
+        <GroupModal show={showGroupModal} onCLose={()=>setShowGroupModal(false)}/>
       </div>
       </>
   )    
