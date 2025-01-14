@@ -6,8 +6,15 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MessageController;
 use Inertia\Inertia;
+Route::get('/test', function() {
+    return 'Hello World';
+});
+
 Route::middleware(['auth', 'verified'])->group(function(){
+    
     Route::get('/',[Homecontroller::class, 'home'])->name('dashboard');
+    Route::get('/messages/{user?}', [HomeController::class, 'showConversation'])->name('messages');
+
     Route::get('/user/{user}', [MessageController::class,'byUser'])->name('chat.user');
     Route::get('/group/{group}', [MessageController::class,'byGroup'])->name('chat.group');
     Route::post('/message', [MessageController::class,'store'])->name('message.store');

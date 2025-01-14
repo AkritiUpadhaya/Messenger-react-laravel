@@ -8,7 +8,7 @@ import { useEventBus } from '@/EventBus';
 import { Link, usePage } from '@inertiajs/react';
 import { useEffect, useState } from 'react';
 
-export default function AuthenticatedLayout({ header, children }) {
+export default function AuthenticatedLayout({header, children }) {
     const page= usePage();
     const user = page.props.auth.user;
     const conversations= page.props.conversations

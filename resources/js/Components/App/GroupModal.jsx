@@ -11,7 +11,7 @@ import UserPicker from './UserPicker'
 
 export default function GroupModal({show, onCLose=()=>{}}) {
     const page= usePage()
-    const conversation= page.props.conversation
+    const conversation= page.props.conversation || []
     const {on, emit}= useEventBus()
     const [group, setGroup]= useState({})
     const {data, setData, processing, reset, post, put, errors}= useForm({
@@ -20,7 +20,9 @@ export default function GroupModal({show, onCLose=()=>{}}) {
         details:"",
         user_ids:[]
     })
-    const users= conversation.filter((c)=>!c.is_group)
+    const users= Array.isArray(conversation)
+    ? conversation.filter((c)=>!c.is_group)
+    :[];
     const createOrUpdateGroup=(e)=>{
         e.preventDefault()
         if(group.id){
@@ -98,7 +100,7 @@ export default function GroupModal({show, onCLose=()=>{}}) {
 
                 }
                 options={users}
-                onselect={(users)=>
+                onSelect={(users)=>
                     setData(
                         "user_ids",
                         users.map((u)=>u.id)

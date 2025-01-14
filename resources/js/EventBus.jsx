@@ -1,17 +1,17 @@
-import React, { Children } from "react";
+import React, { useState } from "react";
 export const EventBusContext= React.createContext()
-export const EventBusProvider= ({Children})=>{
-    const[events, setEvents]= React.useState({})
+export const EventBusProvider= ({children})=>{
+    const[events, setEvents]= useState({})
     const emit= (name, data)=>{
         if(events[name]){
             for(let cb of events[name]){
-                cb(data)
+                cb(data);
             }
         }
     }
     const on = (name, cb)=>{
         if(!events[name]){
-            events[name]=[]
+            events[name]=[];
         }
         events[name].push(cb)
         return ()=>{
@@ -20,7 +20,7 @@ export const EventBusProvider= ({Children})=>{
     }
     return(
         <EventBusContext.Provider value={{emit, on}}>
-            {Children}
+            {children}
         </EventBusContext.Provider>
     )
 }

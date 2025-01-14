@@ -9,9 +9,10 @@ import MessageItem from '@/Components/App/MessageItem';
 import { useEventBus } from '@/EventBus';
 import axios from 'axios';
 import AttachmentPreviewModel from '@/Components/App/AttachmentPreviewModel';
+import MessageInput from '@/Components/App/MessageInput';
 
 
-function HomePage({selectedConversation= null, messages= null}) {
+function HomePage({conversations=[],selectedConversation= null, messages= []}) {
     console.log("messages",messages)
     const [localMessages, setLocalMessages]= useState([]);
     const messagesCtrRef= useRef(null);
